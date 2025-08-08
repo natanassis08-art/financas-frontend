@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { FaSpinner, FaArrowUp, FaArrowDown, FaWallet, FaSearch, FaChartPie, FaChartBar, FaCalendarAlt } from 'react-icons/fa'; // Ícones necessários
 import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, BarChart, XAxis, YAxis, CartesianGrid, Legend, Bar, LabelList } from 'recharts'; // Importar LabelList
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api';ASE_URL = 'http://127.0.0.1:8000/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api';
 
 // Paleta de cores baseada na imagem do gráfico fornecida (mais roxo, verde, laranja, rosa, vermelho)
 const CATEGORY_PIE_COLORS_DASHBOARD = [
