@@ -44,11 +44,19 @@ function DashboardPage() {
   const years = Array.from({ length: 5 }, (_, i) => currentYear - 2 + i);
 
   const fetchDashboardData = async () => {
-    try {
-      setLoading(true);
-      setError(null);
+if (selectedPeriodType === 'month' && (!selectedMonth || selectedMonth < 1 || selectedMonth > 12)) {
+    console.error("Mês inválido detectado, requisição abortada:", selectedMonth);
+    setError("Não foi possível carregar os dados: Mês inválido selecionado.");
+    setLoading(false); // Para parar a animação de "carregando"
+    return; // Impede a requisição de continuar
+  }
+  // FIM DA VERIFICAÇÃO
 
-      let apiUrl = `${API_BASE_URL}/dashboard/`;
+  try {
+    setLoading(true);
+    setError(null);
+
+    let apiUrl = `${API_BASE_URL}/dashboard/`;
       if (selectedPeriodType === 'all') {
         apiUrl += '?period=all';
       } else {
