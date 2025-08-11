@@ -55,42 +55,51 @@ function AnalisesPage() {
     ...Array.from(monthMap.entries()).map(([value, label]) => ({ value, label }))
   ];
 
-  useEffect(() => {
-    const fetchAnalisesAndCategories = async () => {
-      try {
-        setLoading(true);
-        setError(null);
+ useEffect(() => {
+  // Verificação de segurança para o mês. Garante que o mês, se existir, seja um número válido.
+  if (selectedMonth && (parseInt(selectedMonth, 10) < 1 || parseInt(selectedMonth, 10) > 12)) {
+    console.error("Mês inválido em Análises, requisição abortada:", selectedMonth);
+    setError("Filtro de mês inválido selecionado.");
+    setLoading(false);
+    return; // Aborta a busca de dados
+  }
+  // <<< FIM DA CORREÇÃO >>>
 
-        const categoriasResponse = await fetch(`${API_BASE_URL}/categorias/`);
-        if (!categoriasResponse.ok) {
-          throw new Error(`HTTP error! status: ${categoriasResponse.status} ao buscar categorias`);
-        }
-        const categoriasData = await categoriasResponse.json();
-        setAllCategories(categoriasData);
+  const fetchAnalisesAndCategories = async () => {
+    try {
+      setLoading(true);
+      setError(null);
 
-        const queryParams = new URLSearchParams();
-        if (selectedMonth) queryParams.append('month', selectedMonth);
-        if (selectedCategory) queryParams.append('categoria', selectedCategory);
-
-        const apiUrl = `${API_BASE_URL}/analises/?${queryParams.toString()}`;
-
-        const analisesResponse = await fetch(apiUrl);
-        if (!analisesResponse.ok) {
-          throw new Error(`HTTP error! status: ${analisesResponse.status} ao buscar análises`);
-        }
-        const data = await analisesResponse.json();
-        setAnalisesData(data);
-
-      } catch (err) {
-        console.error("Erro ao buscar dados de análises:", err);
-        setError("Não foi possível carregar os dados de análises. Verifique a conexão com o servidor ou os filtros.");
-      } finally {
-        setLoading(false);
+      const categoriasResponse = await fetch(`${API_BASE_URL}/categorias/`);
+      if (!categoriasResponse.ok) {
+        throw new Error(`HTTP error! status: ${categoriasResponse.status} ao buscar categorias`);
       }
-    };
+      const categoriasData = await categoriasResponse.json();
+      setAllCategories(categoriasData);
 
-    fetchAnalisesAndCategories();
-  }, [selectedMonth, selectedCategory]);
+      const queryParams = new URLSearchParams();
+      if (selectedMonth) queryParams.append('month', selectedMonth);
+      if (selectedCategory) queryParams.append('categoria', selectedCategory);
+
+      const apiUrl = `${API_BASE_URL}/analises/?${queryParams.toString()}`;
+
+      const analisesResponse = await fetch(apiUrl);
+      if (!analisesResponse.ok) {
+        throw new Error(`HTTP error! status: ${analisesResponse.status} ao buscar análises`);
+      }
+      const data = await analisesResponse.json();
+      setAnalisesData(data);
+
+    } catch (err) {
+      console.error("Erro ao buscar dados de análises:", err);
+      setError("Não foi possível carregar os dados de análises. Verifique a conexão com o servidor ou os filtros.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchAnalisesAndCategories();
+}, [selectedMonth, selectedCategory]);
 
   const handleClearFilters = () => {
     setSelectedMonth('');
