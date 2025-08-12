@@ -177,12 +177,12 @@ function ProjecoesPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-extrabold text-center pb-4 mb-8
-                     bg-gradient-to-r from-indigo-600 to-purple-700
-                     bg-clip-text text-transparent tracking-tight leading-none
-                     drop-shadow-lg flex items-center justify-center">
-        <FaChartLine className="mr-4 text-4xl" /> Projeções Inteligentes
-      </h1>
+      <h1 className="text-4xl font-extrabold mb-8
+               bg-gradient-to-r from-indigo-600 to-purple-700
+               bg-clip-text text-transparent tracking-tight leading-none
+               drop-shadow-lg flex items-center justify-center">
+  <FaChartLine className="mr-4 text-4xl text-indigo-600" /> Projeções Inteligentes
+</h1>
 
       {/* Filtro por Ano */}
       <div className="bg-gradient-to-l from-purple-100 to-indigo-50 shadow-2xl rounded-xl p-6 mb-8 flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 border border-gray-100">
