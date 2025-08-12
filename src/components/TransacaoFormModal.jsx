@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { FaTimes, FaSave, FaSpinner } from 'react-icons/fa';
+import { toast } from 'react-toastify'; // <<< 1. IMPORTAMOS O TOAST
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api';
 
@@ -17,7 +18,7 @@ function TransacaoFormModal({ isOpen, onClose, onSave, transacaoToEdit }) {
   const [allCategorias, setAllCategorias] = useState([]);
   const [filteredCategorias, setFilteredCategorias] = useState([]);
   const [loadingCategorias, setLoadingCategorias] = useState(true);
-  const [error, setError] = useState(null);
+  // const [error, setError] = useState(null); // <<< 2. REMOVEMOS O ESTADO DE ERRO ANTIGO
 
   useEffect(() => {
     const fetchCategorias = async () => {
@@ -31,14 +32,17 @@ function TransacaoFormModal({ isOpen, onClose, onSave, transacaoToEdit }) {
         setAllCategorias(data);
       } catch (err) {
         console.error("Erro ao buscar categorias:", err);
-        setError("Não foi possível carregar as categorias.");
+        // O erro de carregar categorias pode ser um pop-up também
+        toast.error("Não foi possível carregar as categorias.");
       } finally {
         setLoadingCategorias(false);
       }
     };
 
-    fetchCategorias();
-  }, []);
+    if (isOpen) {
+      fetchCategorias();
+    }
+  }, [isOpen]); // Recarrega categorias sempre que o modal abre
 
   useEffect(() => {
     if (allCategorias.length > 0) {
@@ -56,15 +60,18 @@ function TransacaoFormModal({ isOpen, onClose, onSave, transacaoToEdit }) {
           categoria: transacaoToEdit.categoria || '',
         });
       } else {
-        const defaultCategoria = filtered.length > 0 ? filtered[0].id : '';
-        setFormData(prevData => ({
-          ...prevData,
-          data_transacao: new Date().toISOString().split('T')[0],
-          categoria: defaultCategoria
-        }));
+        // Limpa o formulário para uma nova transação
+        setFormData({
+            descricao: '',
+            valor: '',
+            data_transacao: new Date().toISOString().split('T')[0],
+            tipo: 'despesa',
+            status: 'pendente',
+            categoria: filtered.length > 0 ? filtered[0].id : '',
+        });
       }
     }
-  }, [allCategorias, transacaoToEdit, formData.tipo]);
+  }, [allCategorias, transacaoToEdit, isOpen]); // Roda quando as categorias chegam, quando a prop de edição muda ou quando o modal abre
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -83,9 +90,9 @@ function TransacaoFormModal({ isOpen, onClose, onSave, transacaoToEdit }) {
     });
   };
 
+  // <<< 3. FUNÇÃO HANDLESUBMIT ATUALIZADA
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
 
     try {
       const method = transacaoToEdit ? 'PUT' : 'POST';
@@ -102,32 +109,23 @@ function TransacaoFormModal({ isOpen, onClose, onSave, transacaoToEdit }) {
       });
 
       if (!response.ok) {
+        // Pega a mensagem de erro do backend se houver
         const errorData = await response.json();
-        console.error("Erro na resposta da API:", errorData);
-        let errorMessage = "Erro ao salvar transação.";
-        if (errorData) {
-            errorMessage += " Detalhes: " + JSON.stringify(errorData);
-        }
-        throw new Error(errorMessage);
+        const errorMessage = Object.values(errorData).join(' ');
+        throw new Error(errorMessage || "Erro ao salvar. Verifique os campos e tente novamente.");
       }
 
-      const savedTransacao = await response.json();
-      onSave(savedTransacao);
+      onSave(!!transacaoToEdit); // Passa true se for edição, false se for adição
       onClose();
     } catch (err) {
       console.error("Erro ao enviar formulário:", err);
-      setError(err.message || "Erro desconhecido ao salvar transação.");
+      toast.error(err.message || "Erro desconhecido ao salvar transação."); // Mostra o erro como um pop-up
     }
   };
 
   if (!isOpen) return null;
 
-  // Classes de estilo para os inputs e selects
-  // Modificado: Aumentado py para 3, adicionado shadow-md
   const inputOrSelectClasses = "block w-full px-5 py-3 border border-indigo-300 rounded-xl shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent text-gray-800 placeholder-gray-400 transition-all duration-200 ease-in-out bg-white";
-
-  // Classes de estilo para os labels
-  // Modificado: Adicionado mb-2 para espaçamento entre label e input
   const labelClasses = "block text-sm font-medium text-gray-700 mb-2";
 
   return (
@@ -141,7 +139,6 @@ function TransacaoFormModal({ isOpen, onClose, onSave, transacaoToEdit }) {
           <FaTimes className="text-xl" />
         </button>
 
-        {/* TÍTULO COM GRADIENTE E ESTILO ELEGANTE */}
         <h2 className="text-3xl font-extrabold text-center pb-4 mb-6
                        bg-gradient-to-r from-indigo-600 to-purple-700
                        bg-clip-text text-transparent tracking-tight leading-none">
@@ -155,12 +152,7 @@ function TransacaoFormModal({ isOpen, onClose, onSave, transacaoToEdit }) {
             </div>
         )}
 
-        {error && (
-            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-                <strong className="font-bold">Erro!</strong>
-                <span className="block sm:inline ml-2">{error}</span>
-            </div>
-        )}
+        {/* O DIV DE ERRO ANTIGO FOI REMOVIDO DAQUI */}
 
         {!loadingCategorias && (
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -242,7 +234,6 @@ function TransacaoFormModal({ isOpen, onClose, onSave, transacaoToEdit }) {
               </select>
             </div>
 
-            {/* Dropdown de Categoria Filtrada */}
             <div>
               <label htmlFor="categoria" className={labelClasses}>
                 Categoria

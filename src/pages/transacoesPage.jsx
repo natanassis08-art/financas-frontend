@@ -1,5 +1,6 @@
 // C:\meu_projeto_financas\frontend\src\pages\TransacoesPage.jsx
 
+import { toast } from 'react-toastify';
 import React, { useState, useEffect } from 'react';
 import { FaPlus, FaEdit, FaTrash, FaSpinner, FaSearch, FaTimesCircle, FaArrowUp, FaArrowDown, FaMoneyBillAlt, FaListAlt } from 'react-icons/fa';
 import TransacaoFormModal from '../components/TransacaoFormModal';
@@ -119,10 +120,11 @@ function TransacoesPage() {
     setIsModalOpen(false);
     setTransacaoToEdit(null);
   };
-  const handleSaveTransacao = () => {
-    fetchTransacoesAndCategorias();
-    handleCloseModal();
-  };
+  const handleSaveTransacao = (isEditing) => {
+  fetchTransacoesAndCategorias();
+  handleCloseModal();
+  toast.success(isEditing ? "Transação atualizada com sucesso!" : "Transação adicionada com sucesso!");
+};
   const handleDeleteTransacao = async (id) => {
     if (window.confirm("Tem certeza que deseja excluir esta transação?")) {
       try {
@@ -135,7 +137,7 @@ function TransacoesPage() {
         }
 
         setTransacoes(transacoes.filter(transacao => transacao.id !== id));
-        alert("Transação excluída com sucesso!");
+toast.success("Transação excluída com sucesso!");
 
       } catch (err) {
         console.error("Erro ao excluir transação:", err);

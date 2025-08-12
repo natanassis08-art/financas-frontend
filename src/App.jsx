@@ -1,5 +1,7 @@
 // C:\meu_projeto_financas\frontend\src\App.jsx
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 // Adicione FaTags aqui para o ícone de categorias na sidebar
@@ -22,6 +24,18 @@ function App() {
 
   return (
     <Router>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className="flex min-h-screen bg-gray-50">
         {/* Sidebar */}
         <aside
