@@ -1,7 +1,7 @@
 // C:\meu_projeto_financas\frontend\src\pages\TransacoesPage.jsx
 
 import React, { useState, useEffect } from 'react';
-import { FaPlus, FaEdit, FaTrash, FaSpinner, FaSearch, FaTimesCircle, FaArrowUp, FaArrowDown, FaMoneyBillAlt } from 'react-icons/fa';
+import { FaPlus, FaEdit, FaTrash, FaSpinner, FaSearch, FaTimesCircle, FaArrowUp, FaArrowDown, FaMoneyBillAlt, FaListAlt } from 'react-icons/fa';
 import TransacaoFormModal from '../components/TransacaoFormModal';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api';
@@ -177,13 +177,18 @@ function TransacoesPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8 border-b pb-4">
-        <h1 className="text-4xl font-extrabold text-gray-900">Gerenciamento de Transações</h1>
+        <h1 className="text-4xl font-extrabold
+               bg-gradient-to-r from-indigo-600 to-purple-700
+               bg-clip-text text-transparent tracking-tight leading-none
+               drop-shadow-lg flex items-center justify-start">
+  <FaListAlt className="mr-4 text-4xl text-indigo-600" /> Gerenciamento de Transações
+</h1>
         <button
-          onClick={handleAddTransacao}
-          className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg flex items-center shadow-lg transition duration-300 ease-in-out transform hover:scale-105"
-        >
-          <FaPlus className="mr-2" /> Nova Transação
-        </button>
+  onClick={handleAddTransacao}
+  className="bg-gradient-to-r from-indigo-600 to-purple-700 hover:from-indigo-700 hover:to-purple-800 text-white font-bold py-3 px-6 rounded-lg flex items-center shadow-lg transition duration-300 ease-in-out transform hover:scale-105"
+>
+  <FaPlus className="mr-2" /> Nova Transação
+</button>
       </div>
 
       {/* SEÇÃO DE FILTROS - DESIGN APRIMORADO COM GRADIENTE E SOMBRAS */}

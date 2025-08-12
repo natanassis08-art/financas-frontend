@@ -241,8 +241,8 @@ function AnalisesPage() {
       <h1 className="text-4xl font-extrabold text-center pb-4 mb-8
                      bg-gradient-to-r from-indigo-600 to-purple-700
                      bg-clip-text text-transparent tracking-tight leading-none
-                     drop-shadow-lg flex items-center justify-center">
-        <FaChartLine className="mr-4 text-4xl" /> Análises Financeiras
+                     drop-shadow-lg flex items-center justify-start">
+        <FaChartPie className="mr-4 text-4xl text-indigo-600" /> Análises Financeiras
       </h1>
 
       {/* SEÇÃO DE FILTROS */}

@@ -159,7 +159,8 @@ function MetasPage() {
           <h1 className="text-4xl font-extrabold
                            bg-gradient-to-r from-indigo-600 to-purple-700
                            bg-clip-text text-transparent tracking-tight leading-none
-                           drop-shadow-lg">
+                           drop-shadow-lg flex items-center">
+            <FaBullseye className="mr-4 text-4xl text-indigo-600"/>                
             Gerenciamento de Metas
           </h1>
           {/* APENAS ESTE BOTÃO: Botão "Nova Meta" posicionado no canto superior direito */}

@@ -180,7 +180,7 @@ function ProjecoesPage() {
       <h1 className="text-4xl font-extrabold mb-8
                bg-gradient-to-r from-indigo-600 to-purple-700
                bg-clip-text text-transparent tracking-tight leading-none
-               drop-shadow-lg flex items-center justify-center">
+               drop-shadow-lg flex items-center justify-start">
   <FaChartLine className="mr-4 text-4xl text-indigo-600" /> Projeções Inteligentes
 </h1>
 
