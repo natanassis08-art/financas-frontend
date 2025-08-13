@@ -2,12 +2,11 @@
 
 import React from 'react' // Mantenha a importação de React
 import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
+import AppWrapper from './App.jsx'
 import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  // Remova ou comente as tags <React.StrictMode>
-  // <React.StrictMode>
-    <App />
-  // </React.StrictMode>,
+  <React.StrictMode>
+    <AppWrapper /> {/* MUDANÇA AQUI */}
+  </React.StrictMode>,
 )
