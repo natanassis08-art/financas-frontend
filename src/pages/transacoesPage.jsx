@@ -1,18 +1,14 @@
 // C:\meu_projeto_financas\frontend\src\pages\TransacoesPage.jsx
 
-import { toast } from 'react-toastify';
 import React, { useState, useEffect } from 'react';
 import { FaPlus, FaEdit, FaTrash, FaSpinner, FaSearch, FaTimesCircle, FaArrowUp, FaArrowDown, FaMoneyBillAlt, FaListAlt } from 'react-icons/fa';
 import TransacaoFormModal from '../components/TransacaoFormModal';
+import { toast } from 'react-toastify';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api';
 
-// Função auxiliar para formatar a data para YYYY-MM-DD
-// Adicionada aqui para consistência. Em um projeto maior, moveria para um arquivo de utilitários.
 const formatDateToYYYYMMDD = (dateString) => {
   if (!dateString) return '';
-  // Cria um objeto Date usando a string e forçando 00:00:00 para evitar problemas de fuso horário
-  // ao converter de volta para data local em `input type="date"`
   const date = new Date(dateString + 'T00:00:00');
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -29,12 +25,11 @@ function TransacoesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [transacaoToEdit, setTransacaoToEdit] = useState(null);
 
-  // Inicialize os filtros de data com a função de formatação
   const [descricaoFilter, setDescricaoFilter] = useState('');
   const [valorMinFilter, setValorMinFilter] = useState('');
   const [valorMaxFilter, setValorMaxFilter] = useState('');
-  const [dataInicioFilter, setDataInicioFilter] = useState(''); // Não inicializar com data atual aqui
-  const [dataFimFilter, setDataFimFilter] = useState('');     // para que os campos de filtro fiquem vazios por padrão
+  const [dataInicioFilter, setDataInicioFilter] = useState('');
+  const [dataFimFilter, setDataFimFilter] = useState('');
   const [categoriaFilter, setCategoriaFilter] = useState('');
   const [tipoFilter, setTipoFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
@@ -101,10 +96,6 @@ function TransacoesPage() {
     setCategoriaFilter('');
     setTipoFilter('');
     setStatusFilter('');
-    // Chame fetchTransacoesAndCategorias() após limpar os filtros
-    // ou faça um useEffect que reaja às mudanças dos estados de filtro.
-    // Como você já tem um useEffect vazio que será disparado pelo handleApplyFilters,
-    // podemos chamar fetchTransacoesAndCategorias diretamente.
     fetchTransacoesAndCategorias();
   };
 
@@ -112,19 +103,23 @@ function TransacoesPage() {
     setTransacaoToEdit(null);
     setIsModalOpen(true);
   };
+
   const handleEditTransacao = (transacao) => {
     setTransacaoToEdit(transacao);
     setIsModalOpen(true);
   };
+
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setTransacaoToEdit(null);
   };
+
   const handleSaveTransacao = (isEditing) => {
-  fetchTransacoesAndCategorias();
-  handleCloseModal();
-  toast.success(isEditing ? "Transação atualizada com sucesso!" : "Transação adicionada com sucesso!");
-};
+    fetchTransacoesAndCategorias();
+    handleCloseModal();
+    toast.success(isEditing ? "Transação atualizada com sucesso!" : "Transação adicionada com sucesso!");
+  };
+
   const handleDeleteTransacao = async (id) => {
     if (window.confirm("Tem certeza que deseja excluir esta transação?")) {
       try {
@@ -137,11 +132,11 @@ function TransacoesPage() {
         }
 
         setTransacoes(transacoes.filter(transacao => transacao.id !== id));
-toast.success("Transação excluída com sucesso!");
+        toast.success("Transação excluída com sucesso!");
 
       } catch (err) {
         console.error("Erro ao excluir transação:", err);
-        setError("Não foi possível excluir a transação. Tente novamente.");
+        toast.error("Não foi possível excluir a transação. Tente novamente.");
       }
     }
   };
@@ -156,7 +151,6 @@ toast.success("Transação excluída com sucesso!");
 
   const quantidadeTransacoes = transacoes.length;
 
-  // Classes de estilo para os inputs e selects nos filtros
   const inputOrSelectFilterClasses = "block w-full px-5 py-3 border border-indigo-300 rounded-xl shadow-inner focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent text-gray-800 placeholder-gray-400 transition-all duration-200 ease-in-out bg-white";
 
   if (loading) {
@@ -177,29 +171,27 @@ toast.success("Transação excluída com sucesso!");
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-8 border-b pb-4">
-        <h1 className="text-4xl font-extrabold
-               bg-gradient-to-r from-indigo-600 to-purple-700
-               bg-clip-text text-transparent tracking-tight leading-none
-               drop-shadow-lg flex items-center justify-start">
-  <FaListAlt className="mr-4 text-4xl text-indigo-600" /> Gerenciamento de Transações
-</h1>
+    <div className="container mx-auto px-4 md:px-6 lg:px-8 py-4 md:py-8">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl lg:text-4xl font-extrabold
+                       bg-gradient-to-r from-indigo-600 to-purple-700
+                       bg-clip-text text-transparent tracking-tight leading-none
+                       drop-shadow-lg flex items-center justify-start">
+          <FaListAlt className="mr-4 text-3xl lg:text-4xl text-indigo-600" /> Gerenciamento de Transações
+        </h1>
         <button
-  onClick={handleAddTransacao}
-  className="bg-gradient-to-r from-indigo-600 to-purple-700 hover:from-indigo-700 hover:to-purple-800 text-white font-bold py-3 px-6 rounded-lg flex items-center shadow-lg transition duration-300 ease-in-out transform hover:scale-105"
->
-  <FaPlus className="mr-2" /> Nova Transação
-</button>
+          onClick={handleAddTransacao}
+          className="bg-gradient-to-r from-indigo-600 to-purple-700 hover:from-indigo-700 hover:to-purple-800 text-white font-bold py-3 px-6 rounded-lg flex items-center shadow-lg transition duration-300 ease-in-out transform hover:scale-105"
+        >
+          <FaPlus className="mr-2" /> Nova Transação
+        </button>
       </div>
 
-      {/* SEÇÃO DE FILTROS - DESIGN APRIMORADO COM GRADIENTE E SOMBRAS */}
-      <div className="bg-gradient-to-br from-indigo-50 to-purple-100 shadow-2xl rounded-xl p-8 mb-8 border border-gray-100 transform hover:scale-[1.005] transition-transform duration-300 ease-in-out">
-        <h2 className="text-3xl font-extrabold text-gray-900 mb-8 border-b-2 border-indigo-200 pb-4 flex items-center">
+      <div className="bg-gradient-to-br from-indigo-50 to-purple-100 shadow-2xl rounded-xl p-6 md:p-8 mb-8 border border-gray-100">
+        <h2 className="text-2xl md:text-3xl font-extrabold text-gray-900 mb-8 border-b-2 border-indigo-200 pb-4 flex items-center">
           <FaSearch className="mr-3 text-indigo-600" /> Filtrar Transações
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8 mb-8">
-          {/* Coluna 1: Busca por Texto e Valor */}
           <div>
             <h3 className="text-xl font-bold text-gray-800 mb-4">Texto e Valor</h3>
             <div className="space-y-6">
@@ -210,7 +202,7 @@ toast.success("Transação excluída com sucesso!");
                   id="descricaoFilter"
                   value={descricaoFilter}
                   onChange={(e) => setDescricaoFilter(e.target.value)}
-                  className={inputOrSelectFilterClasses} // Aplicando as classes de filtro
+                  className={inputOrSelectFilterClasses}
                   placeholder="Buscar por descrição"
                 />
               </div>
@@ -223,7 +215,7 @@ toast.success("Transação excluída com sucesso!");
                     value={valorMinFilter}
                     onChange={(e) => setValorMinFilter(e.target.value)}
                     step="0.01"
-                    className={inputOrSelectFilterClasses} // Aplicando as classes de filtro
+                    className={inputOrSelectFilterClasses}
                     placeholder="R$ Mín."
                   />
                 </div>
@@ -235,7 +227,7 @@ toast.success("Transação excluída com sucesso!");
                     value={valorMaxFilter}
                     onChange={(e) => setValorMaxFilter(e.target.value)}
                     step="0.01"
-                    className={inputOrSelectFilterClasses} // Aplicando as classes de filtro
+                    className={inputOrSelectFilterClasses}
                     placeholder="R$ Máx."
                   />
                 </div>
@@ -243,7 +235,6 @@ toast.success("Transação excluída com sucesso!");
             </div>
           </div>
 
-          {/* Coluna 2: Filtros por Atributos */}
           <div>
             <h3 className="text-xl font-bold text-gray-800 mb-4">Atributos e Datas</h3>
             <div className="space-y-6">
@@ -255,7 +246,7 @@ toast.success("Transação excluída com sucesso!");
                     id="dataInicioFilter"
                     value={dataInicioFilter}
                     onChange={(e) => setDataInicioFilter(e.target.value)}
-                    className={inputOrSelectFilterClasses} // Aplicando as classes de filtro
+                    className={inputOrSelectFilterClasses}
                   />
                 </div>
                 <div>
@@ -265,7 +256,7 @@ toast.success("Transação excluída com sucesso!");
                     id="dataFimFilter"
                     value={dataFimFilter}
                     onChange={(e) => setDataFimFilter(e.target.value)}
-                    className={inputOrSelectFilterClasses} // Aplicando as classes de filtro
+                    className={inputOrSelectFilterClasses}
                   />
                 </div>
               </div>
@@ -275,7 +266,7 @@ toast.success("Transação excluída com sucesso!");
                   id="categoriaFilter"
                   value={categoriaFilter}
                   onChange={(e) => setCategoriaFilter(e.target.value)}
-                  className={inputOrSelectFilterClasses} // Aplicando as classes de filtro
+                  className={inputOrSelectFilterClasses}
                 >
                   <option value="">Todas</option>
                   {allCategories.map(cat => (
@@ -290,7 +281,7 @@ toast.success("Transação excluída com sucesso!");
                     id="tipoFilter"
                     value={tipoFilter}
                     onChange={(e) => setTipoFilter(e.target.value)}
-                    className={inputOrSelectFilterClasses} // Aplicando as classes de filtro
+                    className={inputOrSelectFilterClasses}
                   >
                     <option value="">Todos</option>
                     <option value="receita">Receita</option>
@@ -303,7 +294,7 @@ toast.success("Transação excluída com sucesso!");
                     id="statusFilter"
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value)}
-                    className={inputOrSelectFilterClasses} // Aplicando as classes de filtro
+                    className={inputOrSelectFilterClasses}
                   >
                     <option value="">Todos</option>
                     <option value="pendente">Pendente</option>
@@ -329,100 +320,95 @@ toast.success("Transação excluída com sucesso!");
           </button>
         </div>
       </div>
-      {/* FIM SEÇÃO DE FILTROS */}
 
-      {/* CARD DE RESUMO DOS FILTROS */}
       {quantidadeTransacoes > 0 && (
-        <div className="bg-gradient-to-r from-emerald-50 to-green-100 shadow-xl rounded-xl p-6 mb-8 border border-emerald-200 grid grid-cols-1 md:grid-cols-2 gap-6 transform hover:scale-[1.005] transition-transform duration-300 ease-in-out">
-          <div className="text-center p-4 bg-white rounded-lg shadow-md transition duration-200 ease-in-out hover:shadow-lg">
+        <div className="bg-gradient-to-r from-emerald-50 to-green-100 shadow-xl rounded-xl p-6 mb-8 border border-emerald-200 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="text-center p-4 bg-white rounded-lg shadow-md">
             <FaArrowUp className="text-4xl text-emerald-600 mx-auto mb-3" />
             <p className="text-lg font-semibold text-gray-700">Receitas Filtradas</p>
             <p className="text-3xl font-extrabold text-emerald-700">R$ {totalReceitaFiltrada.toFixed(2).replace('.', ',')}</p>
           </div>
-          <div className="text-center p-4 bg-white rounded-lg shadow-md transition duration-200 ease-in-out hover:shadow-lg">
+          <div className="text-center p-4 bg-white rounded-lg shadow-md">
             <FaArrowDown className="text-4xl text-red-600 mx-auto mb-3" />
             <p className="text-lg font-semibold text-gray-700">Despesas Filtradas</p>
             <p className="text-3xl font-extrabold text-red-700">R$ {totalDespesaFiltrada.toFixed(2).replace('.', ',')}</p>
           </div>
         </div>
       )}
-      {/* FIM CARD DE RESUMO */}
 
-      {/* Conteúdo da Tabela de Transações */}
       {transacoes.length === 0 ? (
         <div className="text-center p-6 text-gray-600 bg-white shadow-xl rounded-xl border border-gray-100">
           <p className="text-lg">Nenhuma transação encontrada com os filtros atuais. Tente mudar os filtros ou adicione uma nova transação!</p>
           <button
             onClick={handleAddTransacao}
-            className="mt-6 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-lg flex items-center justify-center mx-auto shadow-lg transition duration-300 ease-in-out transform hover:scale-105"
+            className="mt-6 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-lg flex items-center justify-center mx-auto shadow-lg"
           >
             <FaPlus className="mr-2" /> Adicionar Nova Transação
           </button>
         </div>
       ) : (
-        <div className="bg-white shadow-xl rounded-xl overflow-hidden border border-gray-100">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descrição</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valor</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Categoria</th>
-                <th scope="col" className="relative px-6 py-3 text-right">
-                  <span className="sr-only">Ações</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {transacoes.map((transacao) => (
-                <tr key={transacao.id} className="hover:bg-gray-50 transition-colors duration-150 ease-in-out">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {transacao.descricao}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    <span className={transacao.tipo === 'despesa' ? 'text-red-600 font-semibold' : 'text-green-600 font-semibold'}>
-                      R$ {parseFloat(transacao.valor).toFixed(2).replace('.', ',')}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                    {/* Alterado para usar a função formatDateToYYYYMMDD para exibir a data corretamente */}
-                    {new Date(transacao.data_transacao + 'T00:00:00').toLocaleDateString('pt-BR')}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm capitalize text-gray-800">
-                    {transacao.tipo === 'receita' ? 'Receita' : 'Despesa'}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm capitalize">
-                    <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      transacao.status === 'pago' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
-                    }`}>
-                      {transacao.status === 'pago' ? 'Paga' : 'Pendente'}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                    {categorias[transacao.categoria] || 'N/A'}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button
-                      onClick={() => handleEditTransacao(transacao)}
-                      className="text-indigo-600 hover:text-indigo-900 mr-3 p-1 rounded-md hover:bg-indigo-50 transition-colors duration-150"
-                      title="Editar Transação"
-                    >
-                      <FaEdit />
-                    </button>
-                    <button
-                      onClick={() => handleDeleteTransacao(transacao.id)}
-                      className="text-red-600 hover:text-red-900 p-1 rounded-md hover:bg-red-50 transition-colors duration-150"
-                      title="Excluir Transação"
-                    >
-                      <FaTrash />
-                    </button>
-                  </td>
+        <div className="bg-white shadow-xl rounded-xl border border-gray-100">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descrição</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valor</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipo</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Categoria</th>
+                  <th scope="col" className="relative px-6 py-3 text-right">
+                    <span className="sr-only">Ações</span>
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {transacoes.map((transacao) => (
+                  <tr key={transacao.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      {transacao.descricao}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      <span className={transacao.tipo === 'despesa' ? 'text-red-600 font-semibold' : 'text-green-600 font-semibold'}>
+                        R$ {parseFloat(transacao.valor).toFixed(2).replace('.', ',')}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      {new Date(transacao.data_transacao + 'T00:00:00').toLocaleDateString('pt-BR')}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm capitalize text-gray-800">
+                      {transacao.tipo === 'receita' ? 'Receita' : 'Despesa'}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm capitalize">
+                      <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                        transacao.status === 'pago' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+                      }`}>
+                        {transacao.status === 'pago' ? 'Paga' : 'Pendente'}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      {categorias[transacao.categoria] || 'N/A'}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <button
+                        onClick={() => handleEditTransacao(transacao)}
+                        className="text-indigo-600 hover:text-indigo-900 mr-3 p-1 rounded-md hover:bg-indigo-50"
+                      >
+                        <FaEdit />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteTransacao(transacao.id)}
+                        className="text-red-600 hover:text-red-900 p-1 rounded-md hover:bg-red-50"
+                      >
+                        <FaTrash />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
