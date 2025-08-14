@@ -171,8 +171,9 @@ function TransacoesPage() {
   }
 
   return (
+    // Espaçamento responsivo adicionado ao container principal
     <div className="container mx-auto px-4 md:px-6 lg:px-8 py-4 md:py-8">
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex flex-col md:flex-row justify-between md:items-center mb-8 gap-4">
         <h1 className="text-3xl lg:text-4xl font-extrabold
                        bg-gradient-to-r from-indigo-600 to-purple-700
                        bg-clip-text text-transparent tracking-tight leading-none
@@ -181,7 +182,7 @@ function TransacoesPage() {
         </h1>
         <button
           onClick={handleAddTransacao}
-          className="bg-gradient-to-r from-indigo-600 to-purple-700 hover:from-indigo-700 hover:to-purple-800 text-white font-bold py-3 px-6 rounded-lg flex items-center shadow-lg transition duration-300 ease-in-out transform hover:scale-105"
+          className="bg-gradient-to-r from-indigo-600 to-purple-700 hover:from-indigo-700 hover:to-purple-800 text-white font-bold py-3 px-6 rounded-lg flex items-center shadow-lg transition duration-300 ease-in-out transform hover:scale-105 w-full md:w-auto"
         >
           <FaPlus className="mr-2" /> Nova Transação
         </button>
@@ -347,7 +348,9 @@ function TransacoesPage() {
           </button>
         </div>
       ) : (
+        // O contêiner da tabela agora tem a classe `rounded-xl`
         <div className="bg-white shadow-xl rounded-xl border border-gray-100">
+          {/* Este é o DIV que faz a mágica da rolagem horizontal em telas pequenas */}
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
