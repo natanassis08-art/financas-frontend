@@ -176,8 +176,8 @@ function ProjecoesPage() {
   const monthNamesShort = available_months_in_selected_year.map(m => m.label.substring(0, 3)).join(', ');
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-extrabold mb-8
+    <div className="container mx-auto p-4 md:p-8">
+      <h1 className="text-3xl lg:text-4xl font-extrabold text-center pb-4 mb-8
                bg-gradient-to-r from-indigo-600 to-purple-700
                bg-clip-text text-transparent tracking-tight leading-none
                drop-shadow-lg flex items-center justify-start">

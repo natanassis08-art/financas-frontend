@@ -133,7 +133,7 @@ function MetasPage() {
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto p-4 md:p-8">
         <div className="flex justify-center items-center h-full min-h-[calc(100vh-100px)] bg-white shadow-xl rounded-xl p-6">
           <FaSpinner className="animate-spin text-4xl text-blue-500" />
           <p className="ml-4 text-xl text-gray-700">Carregando metas...</p>
@@ -156,7 +156,7 @@ function MetasPage() {
     <div className="container mx-auto px-4 py-8">
       <>
         <div className="flex justify-between items-center mb-8 border-b-2 border-indigo-200 pb-4">
-          <h1 className="text-4xl font-extrabold
+          <h1 className="text-3xl lg:text-4xl font-extrabold
                            bg-gradient-to-r from-indigo-600 to-purple-700
                            bg-clip-text text-transparent tracking-tight leading-none
                            drop-shadow-lg flex items-center">
@@ -213,7 +213,7 @@ function MetasPage() {
                   )}
 
                   {/* Ícone ilustrativo à esquerda do nome da meta */}
-                  <h2 className="text-xl font-bold text-gray-800 mb-2 flex items-center">
+                  <h2 className="text-lg md:text-xl font-bold text-gray-800 mb-2 flex items-center">
                     {getMetaIcon(meta.tipo)} {meta.nome}
                   </h2>
                   <p className="text-gray-600 mb-3 text-sm">{meta.descricao || 'Sem descrição'}</p>

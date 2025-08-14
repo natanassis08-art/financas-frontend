@@ -227,9 +227,9 @@ if (selectedPeriodType === 'month' && (!selectedMonth || selectedMonth < 1 || se
   ].filter(item => item.valor > 0); // Filtra barras com valor 0
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto p-4 md:p-8">
       {/* TÍTULO PRINCIPAL COM GRADIENTE E SOMBRA */}
-      <h1 className="text-4xl font-extrabold text-center pb-4 mb-8
+      <h1 className="text-3xl lg:text-4xl font-extrabold text-center pb-4 mb-8
                      bg-gradient-to-r from-indigo-600 to-purple-700
                      bg-clip-text text-transparent tracking-tight leading-none
                      drop-shadow-lg flex items-center justify-center">
@@ -313,7 +313,7 @@ if (selectedPeriodType === 'month' && (!selectedMonth || selectedMonth < 1 || se
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Novo Gráfico: Receitas vs Despesas */}
         <div className="bg-white rounded-xl shadow-xl p-7 border border-gray-100 transform hover:scale-[1.005] transition-transform duration-300 ease-in-out">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-6 flex items-center border-b pb-3 border-gray-200">
+          <h2 className="text-xl md:text-2xl font-semibold text-gray-800 mb-6 flex items-center border-b pb-3 border-gray-200">
             <FaChartBar className="mr-3 text-indigo-500" /> Receitas vs Despesas
           </h2>
           {receitasDespesasChartData.length === 0 ? (
@@ -358,7 +358,7 @@ if (selectedPeriodType === 'month' && (!selectedMonth || selectedMonth < 1 || se
 
         {/* Gráfico de Donut: Gastos por Categoria */}
         <div className="bg-white rounded-xl shadow-xl p-7 border border-gray-100 transform hover:scale-[1.005] transition-transform duration-300 ease-in-out">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-6 flex items-center border-b pb-3 border-gray-200">
+          <h2 className="text-xl md:text-2xl font-semibold text-gray-800 mb-6 flex items-center border-b pb-3 border-gray-200">
             <FaChartPie className="mr-3 text-indigo-500" /> Gastos por Categoria
           </h2>
           {finalPieChartData.length === 0 ? (
@@ -395,7 +395,7 @@ if (selectedPeriodType === 'month' && (!selectedMonth || selectedMonth < 1 || se
 
         {/* Gráfico de Barras: Despesas por Status */}
         <div className="bg-white rounded-xl shadow-xl p-7 border border-gray-100 transform hover:scale-[1.005] transition-transform duration-300 ease-in-out">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-6 flex items-center border-b pb-3 border-gray-200">
+          <h2 className="text-xl md:text-2xl font-semibold text-gray-800 mb-6 flex items-center border-b pb-3 border-gray-200">
             <FaChartBar className="mr-3 text-emerald-500" /> Despesas por Status
           </h2>
           {gastosPorStatusChartData.length === 0 ? (

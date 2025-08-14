@@ -1,7 +1,7 @@
 // C:\meu_projeto_financas\frontend\src\pages\CategoriasPage.jsx
 
 import React, { useState, useEffect } from 'react';
-import { FaPlus, FaEdit, FaTrash, FaSpinner, FaTags, FaMoneyBillWave, FaCoins } from 'react-icons/fa'; // Adicionado FaMoneyBillWave e FaCoins para badges
+import { FaPlus, FaEdit, FaTrash, FaSpinner, FaTags, FaMoneyBillWave, FaCoins } from 'react-icons/fa';
 import CategoriaFormModal from '../components/CategoriaFormModal';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api';
@@ -88,42 +88,37 @@ function CategoriasPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto p-4 md:p-8">
       {loading ? (
-        // Conteúdo de carregamento com estilo elegante
         <div className="flex justify-center items-center h-full min-h-[calc(100vh-100px)] bg-white shadow-xl rounded-xl p-6">
           <FaSpinner className="animate-spin text-4xl text-blue-500" />
           <p className="ml-4 text-xl text-gray-700">Carregando categorias...</p>
         </div>
       ) : error ? (
-        // Conteúdo de erro com estilo elegante
         <div className="text-center p-6 text-red-600 bg-red-100 border border-red-400 rounded-md shadow-lg">
           <p>{error}</p>
         </div>
       ) : (
         <>
-          {/* Título e Botão Nova Categoria */}
-          <div className="flex justify-between items-center mb-8 border-b-2 border-indigo-200 pb-4">
-            <h1 className="text-4xl font-extrabold
+          {/* --- CABEÇALHO RESPONSIVO CORRIGIDO --- */}
+          <div className="flex flex-col md:flex-row justify-between md:items-center mb-8 gap-4">
+            <h1 className="text-3xl lg:text-4xl font-extrabold
                            bg-gradient-to-r from-indigo-600 to-purple-700
                            bg-clip-text text-transparent tracking-tight leading-none
                            drop-shadow-lg flex items-center">
-              <FaTags className="mr-3 text-3xl text-indigo-600" /> Gerenciamento de Categorias
+              <FaTags className="mr-3 text-3xl lg:text-4xl text-indigo-600" /> Gerenciamento de Categorias
             </h1>
-            {/* Botão "Nova Categoria" reestilizado */}
             <button
               onClick={handleAddCategoria}
               className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700
                          text-white font-bold py-3 px-6 rounded-full flex items-center justify-center
-                         shadow-lg transition duration-300 ease-in-out transform hover:scale-105
-                         focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                         shadow-lg transition duration-300 ease-in-out transform hover:scale-105 w-full md:w-auto"
             >
               <FaPlus className="mr-2 text-xl" /> Nova Categoria
             </button>
           </div>
 
           {categorias.length === 0 ? (
-            // Conteúdo quando não há categorias com estilo elegante
             <div className="text-center p-8 text-gray-700 bg-white shadow-xl rounded-xl border border-gray-100">
               <p className="text-lg mb-6">Nenhuma categoria encontrada. Comece adicionando uma!</p>
               <button
@@ -134,65 +129,65 @@ function CategoriasPage() {
               </button>
             </div>
           ) : (
-            // Contêiner da tabela de categorias com sombra e bordas arredondadas
-            <div className="bg-white shadow-xl rounded-xl overflow-hidden border border-gray-100 transform hover:scale-[1.005] transition-transform duration-300 ease-in-out">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gradient-to-r from-gray-50 to-gray-100">
-                  <tr>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Nome</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Descrição</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Tipo</th>
-                    <th scope="col" className="relative px-6 py-3 text-right">
-                      <span className="sr-only">Ações</span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-100">
-                  {categorias.map((categoria) => (
-                    <tr key={categoria.id} className="hover:bg-gray-50 transition-colors duration-150 ease-in-out">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {categoria.nome}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                        {categoria.descricao || 'N/A'}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 capitalize">
-                        {/* Indicador de Tipo com Badges e Ícones */}
-                        <span className={`inline-flex items-center px-3 py-1 text-xs leading-5 font-semibold rounded-full
-                                          transform hover:scale-105 transition-transform duration-200 ease-in-out
-                                          ${categoria.tipo_categoria === 'receita'
-                                            ? 'bg-green-100 text-green-800'
-                                            : categoria.tipo_categoria === 'despesa'
-                                              ? 'bg-red-100 text-red-800'
-                                              : 'bg-blue-100 text-blue-800'
-                                          }`}>
-                          {categoria.tipo_categoria === 'receita' && <FaCoins className="mr-1 text-sm" />}
-                          {categoria.tipo_categoria === 'despesa' && <FaMoneyBillWave className="mr-1 text-sm" />}
-                          {categoria.tipo_categoria === 'ambos' && <FaTags className="mr-1 text-sm" />} {/* Ícone para "ambos" */}
-                          {categoria.tipo_categoria === 'receita' ? 'Receita' :
-                           categoria.tipo_categoria === 'despesa' ? 'Despesa' : 'Ambos'}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button
-                          onClick={() => handleEditCategoria(categoria)}
-                          className="text-indigo-600 hover:text-indigo-900 mr-3 p-2 rounded-full hover:bg-indigo-50 transition-colors duration-150"
-                          title="Editar"
-                        >
-                          <FaEdit className="text-lg" />
-                        </button>
-                        <button
-                          onClick={() => handleDeleteCategoria(categoria.id)}
-                          className="text-red-600 hover:text-red-900 p-2 rounded-full hover:bg-red-50 transition-colors duration-150"
-                          title="Excluir"
-                        >
-                          <FaTrash className="text-lg" />
-                        </button>
-                      </td>
+            // --- TABELA RESPONSIVA CORRIGIDA ---
+            <div className="bg-white shadow-xl rounded-xl border border-gray-100">
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gradient-to-r from-gray-50 to-gray-100">
+                    <tr>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Nome</th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Descrição</th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Tipo</th>
+                      <th scope="col" className="relative px-6 py-3 text-right">
+                        <span className="sr-only">Ações</span>
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-100">
+                    {categorias.map((categoria) => (
+                      <tr key={categoria.id} className="hover:bg-gray-50 transition-colors duration-150 ease-in-out">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                          {categoria.nome}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                          {categoria.descricao || 'N/A'}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 capitalize">
+                          <span className={`inline-flex items-center px-3 py-1 text-xs leading-5 font-semibold rounded-full
+                                            ${categoria.tipo_categoria === 'receita'
+                                              ? 'bg-green-100 text-green-800'
+                                              : categoria.tipo_categoria === 'despesa'
+                                                ? 'bg-red-100 text-red-800'
+                                                : 'bg-blue-100 text-blue-800'
+                                            }`}>
+                            {categoria.tipo_categoria === 'receita' && <FaCoins className="mr-1 text-sm" />}
+                            {categoria.tipo_categoria === 'despesa' && <FaMoneyBillWave className="mr-1 text-sm" />}
+                            {categoria.tipo_categoria === 'ambos' && <FaTags className="mr-1 text-sm" />}
+                            {categoria.tipo_categoria === 'receita' ? 'Receita' :
+                             categoria.tipo_categoria === 'despesa' ? 'Despesa' : 'Ambos'}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                          <button
+                            onClick={() => handleEditCategoria(categoria)}
+                            className="text-indigo-600 hover:text-indigo-900 mr-3 p-2 rounded-full hover:bg-indigo-50 transition-colors duration-150"
+                            title="Editar"
+                          >
+                            <FaEdit className="text-lg" />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteCategoria(categoria.id)}
+                            className="text-red-600 hover:text-red-900 p-2 rounded-full hover:bg-red-50 transition-colors duration-150"
+                            title="Excluir"
+                          >
+                            <FaTrash className="text-lg" />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </>
